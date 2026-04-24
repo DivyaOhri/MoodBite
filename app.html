@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MoodBite — Eat What You Feel</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #FFF9F3;
+  --warm-white: #FFFDF9;
+  --peach-light: #FDEEE0;
+  --peach: #F9D4B0;
+  --orange: #E8732A;
+  --orange-deep: #C4561A;
+  --amber: #F4A646;
+  --amber-light: #FBC96A;
+  --rose: #E8556A;
+  --rose-light: #F5849A;
+  --green: #5BAF6E;
+  --green-light: #8FD4A0;
+  --teal: #3AACA8;
+  --lavender: #9B8EC4;
+  --charcoal: #2A2420;
+  --brown: #5C4033;
+  --warm-gray: #8A7A72;
+  --warm-gray-light: #C4B5AE;
+  --card-shadow: 0 16px 48px rgba(90, 50, 20, 0.10);
+  --card-shadow-hover: 0 24px 64px rgba(90, 50, 20, 0.18);
+  --r: 20px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--charcoal);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BG TEXTURE ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background-image:
+    radial-gradient(ellipse 800px 600px at 10% 20%, rgba(248,180,100,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 600px 400px at 85% 70%, rgba(232,115,42,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 400px 300px at 50% 50%, rgba(249,212,176,0.05) 0%, transparent 70%);
+}
+
+/* ── NAVIGATION ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255, 249, 243, 0.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(232,115,42,0.12);
+  padding: 0 40px;
+  height: 68px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 700;
+  color: var(--charcoal);
+  text-decoration: none;
+}
+
+.nav-brand span { color: var(--orange); }
+.nav-brand-emoji { font-size: 1.4rem; }
+
+.nav-links {
+  display: flex; align-items: center; gap: 4px;
+  list-style: none;
+}
+
+.nav-links li a {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 14px;
+  border-radius: 50px;
+  font-size: 0.85rem; font-weight: 500;
+  color: var(--warm-gray);
+  text-decoration: none;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  background: var(--peach-light);
+  color: var(--orange);
+}
+
+.nav-cta {
+  background: linear-gradient(135deg, var(--orange), var(--rose)) !important;
+  color: white !important;
+  box-shadow: 0 4px 16px rgba(232,115,42,0.35) !important;
+}
+.nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ── PAGE SECTIONS ── */
+.page { display: none; padding-top: 68px; }
+.page.active { display: block; }
+
+/* ── SECTION CONTAINER ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+/* ── HOME PAGE ── */
+.hero {
+  position: relative;
+  padding: 100px 40px 80px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--peach-light);
+  border: 1px solid var(--peach);
+  border-radius: 50px;
+  padding: 8px 18px;
+  font-size: 0.82rem; font-weight: 600;
+  color: var(--orange-deep);
+  margin-bottom: 28px;
+  letter-spacing: 0.5px;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.08;
+  color: var(--charcoal);
+  margin-bottom: 24px;
+}
+
+.hero-title em { color: var(--orange); font-style: italic; }
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--warm-gray);
+  max-width: 520px;
+  margin: 0 auto 48px;
+  line-height: 1.75;
+  font-weight: 400;
+}
+
+.hero-sub strong { color: var(--charcoal); font-weight: 600; }
+
+.hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 30px;
+  border-radius: 50px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; border: none;
+  transition: all 0.25s;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--rose) 100%);
+  color: white;
+  box-shadow: 0 8px 28px rgba(232,115,42,0.40);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(232,115,42,0.50); }
+
+.btn-ghost {
+  background: white;
+  color: var(--charcoal);
+  border: 1.5px solid var(--peach);
+  box-shadow: var(--card-shadow);
+}
+.btn-ghost:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-2px); }
+
+/* Hero floating emoji blobs */
+.hero-blobs {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+}
+.blob { position: absolute; border-radius: 50%; opacity: 0.18; filter: blur(60px); }
+.blob-1 { width: 400px; height: 400px; background: var(--amber); top: -100px; left: -100px; animation: blobFloat 8s ease-in-out infinite; }
+.blob-2 { width: 300px; height: 300px; background: var(--rose); top: 50px; right: -80px; animation: blobFloat 10s ease-in-out infinite reverse; }
+.blob-3 { width: 250px; height: 250px; background: var(--orange); bottom: -60px; left: 40%; animation: blobFloat 7s ease-in-out infinite 2s; }
+
+@keyframes blobFloat {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+
+.hero-emoji-float {
+  display: inline-block;
+  animation: emojiFloat 3s ease-in-out infinite;
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+@keyframes emojiFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+/* ── STATS BAR ── */
+.stats-bar {
+  background: white;
+  border-radius: 24px;
+  padding: 32px 40px;
+  margin: 0 40px 60px;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  box-shadow: var(--card-shadow);
+}
+
+.stat-item { text-align: center; }
+.stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem; font-weight: 700;
+  color: var(--orange);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.stat-label { font-size: 0.82rem; color: var(--warm-gray); font-weight: 500; }
+
+/* ── FEATURE CARDS ── */
+.features { padding: 0 40px 80px; }
+.features-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem; font-weight: 700;
+  color: var(--charcoal);
+  text-align: center;
+  margin-bottom: 40px;
+}
+.features-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.feature-card {
+  background: white;
+  border-radius: var(--r);
+  padding: 36px 28px;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--orange), var(--amber));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.3s;
+}
+.feature-card:hover { transform: translateY(-6px); box-shadow: var(--card-shadow-hover); }
+.feature-card:hover::before { transform: scaleX(1); }
+
+.feature-icon {
+  width: 60px; height: 60px;
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 20px;
+}
+.feature-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem; font-weight: 700;
+  color: var(--charcoal);
+  margin-bottom: 10px;
+}
+.feature-card p { font-size: 0.9rem; color: var(--warm-gray); line-height: 1.7; }
+
+/* ── HOW IT WORKS ── */
+.how-section {
+  background: var(--peach-light);
+  margin: 0 40px 80px;
+  border-radius: 28px;
+  padding: 60px 50px;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem; font-weight: 700;
+  color: var(--charcoal);
+  text-align: center; margin-bottom: 48px;
+}
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.step { text-align: center; }
+.step-num {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), var(--rose));
+  color: white;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 6px 20px rgba(232,115,42,0.35);
+}
+.step-emoji { font-size: 2.2rem; margin-bottom: 12px; }
+.step h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 700;
+  color: var(--charcoal); margin-bottom: 8px;
+}
+.step p { font-size: 0.88rem; color: var(--warm-gray); line-height: 1.65; }
+
+/* ── FORM PAGES ── */
+.form-page { padding: 40px; }
+.page-header { margin-bottom: 40px; }
+.page-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.6rem; font-weight: 700;
+  color: var(--charcoal); margin-bottom: 8px;
+}
+.page-header p { font-size: 1rem; color: var(--warm-gray); }
+
+/* Cards / panels */
+.panel {
+  background: white;
+  border-radius: var(--r);
+  padding: 36px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 24px;
+}
+.panel-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem; font-weight: 700;
+  color: var(--charcoal); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+
+/* MOOD SELECTOR */
+.mood-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+.mood-option {
+  background: var(--cream);
+  border: 2px solid var(--peach);
+  border-radius: 16px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+.mood-option:hover { border-color: var(--amber); background: var(--peach-light); }
+.mood-option.selected { border-color: var(--orange); background: var(--peach-light); box-shadow: 0 0 0 3px rgba(232,115,42,0.15); }
+.mood-option .mood-emoji { font-size: 2rem; margin-bottom: 6px; }
+.mood-option .mood-label { font-size: 0.82rem; font-weight: 600; color: var(--charcoal); }
+.mood-option .mood-sub { font-size: 0.72rem; color: var(--warm-gray); margin-top: 2px; }
+
+/* SLIDER */
+.slider-wrap { position: relative; }
+.slider-labels { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--warm-gray); margin-bottom: 8px; }
+input[type=range] {
+  width: 100%; height: 6px;
+  -webkit-appearance: none;
+  background: var(--peach);
+  border-radius: 3px; outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), var(--rose));
+  box-shadow: 0 3px 10px rgba(232,115,42,0.4);
+  cursor: pointer; transition: transform 0.15s;
+}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.slider-val {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--orange), var(--rose));
+  color: white; font-weight: 700; font-size: 0.85rem;
+  padding: 4px 12px; border-radius: 20px;
+  margin-top: 10px;
+}
+
+/* INPUTS */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-label { font-size: 0.88rem; font-weight: 600; color: var(--charcoal); }
+.form-input, .form-select {
+  background: var(--cream);
+  border: 2px solid var(--peach);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  color: var(--charcoal);
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+.form-input:focus, .form-select:focus { border-color: var(--orange); }
+.form-input::placeholder { color: var(--warm-gray-light); }
+
+/* SUBMIT BTN */
+.btn-submit {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--orange) 0%, var(--rose) 100%);
+  color: white; border: none;
+  border-radius: 50px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.05rem; font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(232,115,42,0.40);
+  transition: all 0.25s;
+  letter-spacing: 0.3px;
+}
+.btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(232,115,42,0.50); }
+
+/* ── RESULTS / INSIGHTS ── */
+.results-hero {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--rose) 100%);
+  border-radius: 28px;
+  padding: 52px 48px;
+  color: white;
+  text-align: center;
+  margin-bottom: 36px;
+  box-shadow: 0 16px 48px rgba(232,115,42,0.35);
+  position: relative; overflow: hidden;
+}
+.results-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.12) 0%, transparent 60%);
+}
+.results-hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem; font-weight: 700;
+  margin-bottom: 12px;
+  position: relative;
+}
+.results-hero p { font-size: 1.05rem; opacity: 0.92; max-width: 500px; margin: 0 auto; line-height: 1.7; position: relative; }
+
+.result-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-bottom: 28px; }
+
+.result-card {
+  background: white;
+  border-radius: 22px;
+  padding: 28px 24px;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s;
+  border-top: 4px solid transparent;
+  position: relative;
+}
+.result-card:nth-child(1) { border-top-color: var(--amber); }
+.result-card:nth-child(2) { border-top-color: var(--green); }
+.result-card:nth-child(3) { border-top-color: var(--teal); }
+.result-card:hover { transform: translateY(-6px); box-shadow: var(--card-shadow-hover); }
+
+.result-rank {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 1px;
+  color: var(--warm-gray); text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.result-food-emoji { font-size: 3.5rem; text-align: center; margin-bottom: 14px; }
+.result-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-weight: 700;
+  color: var(--charcoal); text-align: center; margin-bottom: 6px;
+}
+.result-place { font-size: 0.82rem; color: var(--warm-gray); text-align: center; margin-bottom: 14px; }
+.result-desc { font-size: 0.85rem; color: var(--brown); line-height: 1.65; text-align: center; margin-bottom: 16px; }
+.result-tags { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; }
+.tag {
+  background: var(--peach-light); color: var(--orange-deep);
+  font-size: 0.72rem; font-weight: 600;
+  padding: 4px 10px; border-radius: 20px;
+}
+.result-price-box {
+  background: var(--cream);
+  border-radius: 14px;
+  padding: 14px;
+  text-align: center;
+}
+.result-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.9rem; font-weight: 700;
+  color: var(--orange);
+}
+.result-save { font-size: 0.78rem; color: var(--green); font-weight: 600; margin-top: 2px; }
+
+/* ── MOOD INSIGHTS ── */
+.mood-hero-card {
+  border-radius: 24px;
+  padding: 40px;
+  text-align: center;
+  margin-bottom: 28px;
+  box-shadow: var(--card-shadow);
+}
+.mood-big-emoji { font-size: 4.5rem; margin-bottom: 14px; }
+.mood-hero-card h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem; font-weight: 700; color: var(--charcoal); margin-bottom: 8px;
+}
+.mood-hero-card p { font-size: 1rem; color: var(--warm-gray); }
+
+.meter-row { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-bottom: 28px; }
+.meter-card { background: white; border-radius: var(--r); padding: 28px; box-shadow: var(--card-shadow); }
+.meter-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 700; color: var(--charcoal); margin-bottom: 14px;
+}
+.meter-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem; font-weight: 700; color: var(--orange); line-height: 1; margin-bottom: 14px;
+}
+.meter-val span { font-size: 1rem; color: var(--warm-gray); }
+.meter-bar { height: 8px; background: var(--peach); border-radius: 4px; overflow: hidden; }
+.meter-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--orange), var(--amber)); transition: width 1s ease; }
+
+.ai-explain {
+  background: linear-gradient(135deg, #FFF8F0, #FDEEE0);
+  border-left: 5px solid var(--orange);
+  border-radius: 0 16px 16px 0;
+  padding: 28px 32px;
+  margin-bottom: 28px;
+}
+.ai-explain h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 700; color: var(--charcoal); margin-bottom: 10px;
+}
+.ai-explain p { font-size: 0.95rem; color: var(--brown); line-height: 1.75; }
+
+.tags-section h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem; font-weight: 700; color: var(--charcoal); margin-bottom: 14px;
+}
+.tags-big { display: flex; flex-wrap: wrap; gap: 10px; }
+.tag-big {
+  padding: 10px 20px; border-radius: 50px;
+  font-size: 0.88rem; font-weight: 600;
+  color: var(--charcoal);
+}
+
+.wellness-tip {
+  background: white;
+  border-radius: var(--r);
+  padding: 22px 28px;
+  box-shadow: var(--card-shadow);
+  display: flex; align-items: flex-start; gap: 14px;
+  margin-top: 24px;
+}
+.wellness-tip .tip-icon { font-size: 1.4rem; flex-shrink: 0; }
+.wellness-tip p { font-size: 0.9rem; color: var(--brown); line-height: 1.7; }
+.wellness-tip strong { color: var(--charcoal); }
+
+/* ── BUDGET INSIGHTS ── */
+.budget-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 28px; }
+.budget-box {
+  border-radius: 20px; padding: 28px 24px; text-align: center;
+  box-shadow: var(--card-shadow);
+}
+.budget-box-icon { font-size: 1.6rem; margin-bottom: 10px; }
+.budget-box-label { font-size: 0.82rem; color: var(--warm-gray); margin-bottom: 8px; }
+.budget-box-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem; font-weight: 700;
+}
+
+.comparison-list { display: flex; flex-direction: column; gap: 12px; }
+.comp-row {
+  background: white; border-radius: 14px; padding: 18px 22px;
+  display: flex; align-items: center; gap: 16px;
+  box-shadow: 0 4px 16px rgba(90,50,20,0.07);
+}
+.comp-info { flex: 1; }
+.comp-name { font-weight: 600; color: var(--charcoal); font-size: 0.92rem; }
+.comp-place { font-size: 0.78rem; color: var(--warm-gray); margin-top: 2px; }
+.comp-bar-wrap { flex: 2; }
+.comp-bar-bg { height: 6px; background: var(--peach); border-radius: 3px; overflow: hidden; }
+.comp-bar-fill { height: 100%; border-radius: 3px; transition: width 1s; }
+.comp-price { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; }
+
+/* ── FOOD DETAILS ── */
+.food-detail-card {
+  background: white; border-radius: 24px;
+  padding: 36px; box-shadow: var(--card-shadow);
+  margin-bottom: 24px;
+  display: flex; gap: 28px; align-items: flex-start;
+  border-left: 5px solid var(--orange);
+  transition: all 0.3s;
+}
+.food-detail-card:hover { transform: translateX(4px); box-shadow: var(--card-shadow-hover); }
+.food-detail-emoji { font-size: 4.5rem; flex-shrink: 0; }
+.food-detail-content { flex: 1; }
+.food-detail-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem; font-weight: 700; color: var(--charcoal); margin-bottom: 6px;
+}
+.food-detail-meta { font-size: 0.85rem; color: var(--warm-gray); margin-bottom: 12px; }
+.food-detail-desc { font-size: 0.92rem; color: var(--brown); line-height: 1.72; margin-bottom: 16px; }
+.food-detail-bottom { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.food-price-big {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.9rem; font-weight: 700; color: var(--orange);
+}
+
+.food-science {
+  background: linear-gradient(135deg, #F0FAF5, #D4F5E9);
+  border-radius: var(--r); padding: 24px 28px;
+  border-left: 5px solid var(--green);
+  margin-top: 24px;
+}
+.food-science h4 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; font-weight: 700; color: var(--charcoal); margin-bottom: 10px;
+}
+.food-science p { font-size: 0.9rem; color: #3A6A4A; line-height: 1.7; }
+
+/* ── PROFILE ── */
+.profile-layout { display: grid; grid-template-columns: 260px 1fr; gap: 28px; }
+.profile-avatar-card {
+  background: white; border-radius: 24px;
+  padding: 36px 24px; text-align: center;
+  box-shadow: var(--card-shadow); height: fit-content;
+}
+.avatar-circle {
+  width: 100px; height: 100px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), var(--rose));
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 24px rgba(232,115,42,0.35);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.6rem; font-weight: 700; color: white;
+}
+.avatar-name { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; color: var(--charcoal); margin-bottom: 4px; }
+.avatar-uni { font-size: 0.82rem; color: var(--warm-gray); }
+.mood-snapshot { background: var(--peach-light); border-radius: 16px; padding: 18px; margin-top: 24px; }
+.mood-snapshot-label { font-size: 0.78rem; color: var(--warm-gray); margin-bottom: 8px; }
+.mood-snapshot-emoji { font-size: 2.2rem; margin-bottom: 6px; }
+.mood-snapshot-val { font-size: 0.9rem; font-weight: 600; color: var(--charcoal); }
+
+.profile-form-card { background: white; border-radius: 24px; padding: 36px; box-shadow: var(--card-shadow); }
+.profile-form-card h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem; font-weight: 700; color: var(--charcoal); margin-bottom: 24px;
+}
+
+.badges-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 28px; }
+.badge-card { border-radius: 16px; padding: 20px; text-align: center; }
+.badge-icon { font-size: 1.8rem; margin-bottom: 8px; }
+.badge-label { font-size: 0.78rem; font-weight: 600; color: var(--charcoal); }
+
+/* ── ABOUT PAGE ── */
+.about-hero {
+  background: linear-gradient(135deg, var(--orange) 0%, var(--rose) 100%);
+  border-radius: 28px; padding: 52px 48px; color: white;
+  margin-bottom: 36px; box-shadow: 0 16px 48px rgba(232,115,42,0.30);
+}
+.about-hero h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 700; margin-bottom: 16px; }
+.about-hero p { font-size: 1.05rem; opacity: 0.93; line-height: 1.8; max-width: 620px; }
+
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
+.about-card { background: white; border-radius: var(--r); padding: 32px; box-shadow: var(--card-shadow); }
+.about-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 700; color: var(--charcoal); margin-bottom: 16px; }
+.about-card ul { padding-left: 20px; }
+.about-card li { font-size: 0.9rem; color: var(--brown); line-height: 2; }
+
+.wellness-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
+.wellness-card { border-radius: 16px; padding: 24px 28px; }
+.wellness-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 700; color: var(--charcoal); margin-bottom: 12px; }
+.wellness-card ul { padding-left: 18px; }
+.wellness-card li { font-size: 0.85rem; color: var(--brown); line-height: 1.9; }
+
+.team-section { background: white; border-radius: 24px; padding: 40px; box-shadow: var(--card-shadow); }
+.team-section h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 700; color: var(--charcoal); text-align: center; margin-bottom: 32px; }
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.team-card { border-radius: 16px; padding: 24px 16px; text-align: center; }
+.team-initial {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--orange), var(--rose));
+  color: white; font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+}
+.team-name { font-weight: 600; color: var(--charcoal); font-size: 0.9rem; margin-bottom: 3px; }
+.team-reg { font-size: 0.75rem; color: var(--warm-gray); margin-bottom: 8px; }
+.team-role { font-size: 0.78rem; color: var(--orange); font-weight: 600; }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 40px;
+  color: var(--warm-gray);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--peach);
+  margin-top: 60px;
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; bottom: 30px; right: 30px;
+  background: white; border-left: 4px solid var(--green);
+  border-radius: 14px; padding: 16px 22px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  font-size: 0.9rem; color: var(--charcoal);
+  transform: translateY(100px); opacity: 0;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 999; max-width: 340px;
+  display: flex; align-items: center; gap: 10px;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+
+/* ── ACTION ROW ── */
+.action-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 28px; }
+.btn-sm {
+  padding: 11px 22px; border-radius: 50px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; border: none; transition: all 0.2s;
+}
+.btn-sm-primary {
+  background: linear-gradient(135deg, var(--orange), var(--rose));
+  color: white; box-shadow: 0 4px 16px rgba(232,115,42,0.35);
+}
+.btn-sm-primary:hover { transform: translateY(-2px); }
+.btn-sm-ghost {
+  background: white; color: var(--charcoal);
+  border: 1.5px solid var(--peach);
+}
+.btn-sm-ghost:hover { border-color: var(--orange); color: var(--orange); }
+
+/* ── SUMMARY DARK BAR ── */
+.summary-bar {
+  background: linear-gradient(135deg, #2A2420, #1A1610);
+  border-radius: 20px; padding: 30px 36px;
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+  margin-top: 8px;
+}
+.summary-bar-info { flex: 1; }
+.summary-bar-info h4 { font-family: 'Cormorant Garamond', serif; color: white; font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+.summary-bar-info p { font-size: 0.9rem; color: rgba(255,255,255,0.75); }
+.summary-bar-info b { color: var(--amber-light); }
+.summary-price { text-align: center; }
+.summary-price-num { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; color: var(--amber); }
+.summary-price-label { font-size: 0.75rem; color: rgba(255,255,255,0.5); }
+
+/* ── LOADING ANIMATION ── */
+.loading-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(255,249,243,0.92); backdrop-filter: blur(8px);
+  z-index: 200; align-items: center; justify-content: center;
+  flex-direction: column; gap: 20px;
+}
+.loading-overlay.active { display: flex; }
+.loading-emoji { font-size: 4rem; animation: spin 1.5s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.loading-text { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; color: var(--charcoal); }
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  nav { padding: 0 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 60px 20px 50px; }
+  .hero-title { font-size: 2.4rem; }
+  .stats-bar { grid-template-columns: repeat(2,1fr); margin: 0 20px 40px; padding: 24px; }
+  .features-grid, .steps, .result-cards, .meter-row, .budget-trio { grid-template-columns: 1fr; }
+  .features, .form-page, .how-section { margin: 0 20px; padding: 40px 28px; }
+  .about-grid, .wellness-grid { grid-template-columns: 1fr; }
+  .profile-layout { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: repeat(2,1fr); }
+  .food-detail-card { flex-direction: column; }
+  .form-row { grid-template-columns: 1fr; }
+  .badges-row { grid-template-columns: repeat(2, 1fr); }
+  .container, .form-page { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-emoji">🍜</div>
+  <div class="loading-text">Analysing your mood...</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span>✅</span>
+  <span id="toastMsg">Done!</span>
+</div>
+
+<!-- ── NAVIGATION ── -->
+<nav>
+  <a class="nav-brand" href="#" onclick="showPage('home')">
+    <span class="nav-brand-emoji">🍜</span>
+    Mood<span>Bite</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')" id="nav-home" class="active">🏠 Home</a></li>
+    <li><a href="#" onclick="showPage('mood')" id="nav-mood">😊 Mood Check</a></li>
+    <li><a href="#" onclick="showPage('insights')" id="nav-insights">💡 Mood Insights</a></li>
+    <li><a href="#" onclick="showPage('budget')" id="nav-budget">💰 Budget</a></li>
+    <li><a href="#" onclick="showPage('food')" id="nav-food">🍽️ Food Details</a></li>
+    <li><a href="#" onclick="showPage('profile')" id="nav-profile">👤 Profile</a></li>
+    <li><a href="#" onclick="showPage('results')" id="nav-results">✨ Results</a></li>
+    <li><a href="#" onclick="showPage('about')" id="nav-about">📖 About</a></li>
+    <li><a href="#" onclick="showPage('mood')" class="nav-cta btn">🚀 Get Started</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════ PAGE: HOME ═══════════ -->
+<div class="page active" id="page-home">
+  <div class="hero">
+    <div class="hero-blobs">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+    <div class="hero-badge">🌟 521 menu items · 19 restaurants · Shoolini University</div>
+    <div class="hero-emoji-float">🍜</div>
+    <h1 class="hero-title">
+      Food that matches<br><em>how you feel</em>
+    </h1>
+    <p class="hero-sub">
+      Tell us your mood and MoodBite finds the <strong>perfect meal</strong> from cafés right around campus — mood-aware, budget-smart, and always local.
+    </p>
+    <div class="hero-btns">
+      <button class="btn btn-primary" onclick="showPage('mood')">🚀 Start Mood Check →</button>
+      <button class="btn btn-ghost" onclick="showPage('about')">📖 Learn More</button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-item"><div class="stat-num">521</div><div class="stat-label">Menu Items</div></div>
+    <div class="stat-item"><div class="stat-num">19</div><div class="stat-label">Restaurants</div></div>
+    <div class="stat-item"><div class="stat-num">7</div><div class="stat-label">Mood Types</div></div>
+    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Local Data</div></div>
+  </div>
+
+  <div class="features">
+    <h2 class="features-title">Why MoodBite is different ✨</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#FFE4CC;">🧠</div>
+        <h3>Mood-Aware AI</h3>
+        <p>We read your emotional and physical state and match food to how you actually feel — not just what's trending.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#D4F5E9;">📍</div>
+        <h3>Truly Local</h3>
+        <p>521 real menu items from 19 restaurants around Shoolini campus. Every recommendation is walkable from your lecture hall.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon" style="background:#E8F4FD;">💸</div>
+        <h3>Budget Smart</h3>
+        <p>Set your budget ceiling — we'll only show you what you can actually afford, with savings displayed on every pick.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="how-section">
+    <h2 class="section-title">How it works in 3 steps ✨</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-emoji">🙂</div>
+        <h4>Tell us your mood</h4>
+        <p>Answer 4 quick questions about your emotional state, stress level, energy, and budget. Takes 30 seconds.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-emoji">🔍</div>
+        <h4>AI finds your match</h4>
+        <p>Our RAG pipeline maps your emotional profile to the most fitting food options using semantic vector search.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-emoji">🍽️</div>
+        <h4>Enjoy your meal</h4>
+        <p>Get 2–3 personalised picks with full explanations, locations, and price breakdowns. Walk over and eat!</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>Made with ❤️ at Yogananda School of AI, Shoolini University · CSU2217 · GenAI with Vector Database</footer>
+</div>
+
+<!-- ═══════════ PAGE: MOOD CHECK ═══════════ -->
+<div class="page" id="page-mood">
+  <div class="form-page">
+    <div class="page-header">
+      <h1>😊 Mood Check</h1>
+      <p>Let's understand how you're feeling right now — takes about 30 seconds!</p>
+    </div>
+
+    <!-- Mood selection -->
+    <div class="panel">
+      <div class="panel-title">🎭 How are you feeling right now?</div>
+      <div class="mood-grid" id="moodGrid">
+        <div class="mood-option selected" data-mood="happy" onclick="selectMood(this)">
+          <div class="mood-emoji">😊</div>
+          <div class="mood-label">Happy & Energetic</div>
+          <div class="mood-sub">In great spirits</div>
+        </div>
+        <div class="mood-option" data-mood="stressed" onclick="selectMood(this)">
+          <div class="mood-emoji">😰</div>
+          <div class="mood-label">Stressed</div>
+          <div class="mood-sub">Overwhelmed today</div>
+        </div>
+        <div class="mood-option" data-mood="tired" onclick="selectMood(this)">
+          <div class="mood-emoji">😴</div>
+          <div class="mood-label">Tired & Low Energy</div>
+          <div class="mood-sub">Running on empty</div>
+        </div>
+        <div class="mood-option" data-mood="anxious" onclick="selectMood(this)">
+          <div class="mood-emoji">😟</div>
+          <div class="mood-label">Anxious & Uneasy</div>
+          <div class="mood-sub">Feeling unsettled</div>
+        </div>
+        <div class="mood-option" data-mood="neutral" onclick="selectMood(this)">
+          <div class="mood-emoji">😐</div>
+          <div class="mood-label">Neutral / Just Hungry</div>
+          <div class="mood-sub">No strong feelings</div>
+        </div>
+        <div class="mood-option" data-mood="frustrated" onclick="selectMood(this)">
+          <div class="mood-emoji">😤</div>
+          <div class="mood-label">Frustrated</div>
+          <div class="mood-sub">Irritated & restless</div>
+        </div>
+        <div class="mood-option" data-mood="cozy" onclick="selectMood(this)">
+          <div class="mood-emoji">🥰</div>
+          <div class="mood-label">Cozy & Relaxed</div>
+          <div class="mood-sub">Comfortable & calm</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stress slider -->
+    <div class="panel">
+      <div class="panel-title">🌡️ Stress level right now</div>
+      <div class="slider-labels"><span>1 — Totally chill</span><span>10 — Overwhelmed</span></div>
+      <input type="range" min="1" max="10" value="5" id="stressSlider" oninput="updateSlider('stressSlider','stressVal')">
+      <div><span class="slider-val" id="stressVal">5 / 10</span></div>
+    </div>
+
+    <!-- Energy slider -->
+    <div class="panel">
+      <div class="panel-title">⚡ Energy level (0–100)</div>
+      <div class="slider-labels"><span>0 — Exhausted</span><span>100 — Fully charged</span></div>
+      <input type="range" min="0" max="100" value="50" id="energySlider" oninput="updateSlider('energySlider','energyVal')">
+      <div><span class="slider-val" id="energyVal">50 / 100</span></div>
+    </div>
+
+    <!-- Budget & Cuisine -->
+    <div class="panel">
+      <div class="panel-title">🎯 Your Preferences</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">💰 Budget (₹)</label>
+          <input type="number" class="form-input" id="budgetInput" value="150" min="20" max="1000" step="10">
+        </div>
+        <div class="form-group">
+          <label class="form-label">🍴 Cuisine (optional)</label>
+          <select class="form-select" id="cuisineSelect">
+            <option>Any</option><option>Indian</option><option>Chinese</option>
+            <option>Pizza</option><option>South Indian</option><option>Maggi</option>
+            <option>Momos</option><option>Burger</option><option>Pasta</option>
+            <option>Thali</option><option>Chai</option><option>Shake</option><option>Juice</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-submit" onclick="submitMoodForm()">🔍 Find My Perfect Meal →</button>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE: MOOD INSIGHTS ═══════════ -->
+<div class="page" id="page-insights">
+  <div class="form-page">
+    <div class="page-header">
+      <h1>💡 Mood Insights</h1>
+      <p>Here's what we understood about how you're feeling.</p>
+    </div>
+
+    <div class="mood-hero-card" id="moodHeroCard">
+      <div class="mood-big-emoji" id="insightEmoji">😊</div>
+      <h2>You're feeling <span id="insightMoodLabel" style="color:var(--orange)">Happy & Energetic</span></h2>
+      <p id="insightTagline">You're radiating good vibes today!</p>
+    </div>
+
+    <div class="meter-row">
+      <div class="meter-card">
+        <div class="meter-label">⚡ Energy Level</div>
+        <div class="meter-val" id="insightEnergyNum">50<span>/100</span></div>
+        <div class="meter-bar"><div class="meter-fill" id="insightEnergyBar" style="width:50%"></div></div>
+      </div>
+      <div class="meter-card">
+        <div class="meter-label">🌡️ Stress Level</div>
+        <div class="meter-val" id="insightStressNum">5<span>/10</span></div>
+        <div class="meter-bar"><div class="meter-fill" id="insightStressBar" style="width:50%;background:linear-gradient(90deg,var(--rose),var(--rose-light))"></div></div>
+      </div>
+    </div>
+
+    <div class="ai-explain">
+      <h4>🤖 What this means for your food</h4>
+      <p id="insightExplain">Your positive state boosts taste perception — this is a great moment to try something exciting and delicious!</p>
+    </div>
+
+    <div class="tags-section">
+      <h4>🏷️ Food signals we're searching for</h4>
+      <div class="tags-big" id="insightTags"></div>
+    </div>
+
+    <div class="wellness-tip">
+      <div class="tip-icon">🌱</div>
+      <p id="insightWellnessTip"><strong>Wellness Tip:</strong> Your positive state boosts taste perception — try something new today!</p>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-sm btn-sm-ghost" onclick="showPage('budget')">💰 Budget Insights →</button>
+      <button class="btn-sm btn-sm-primary" onclick="showPage('results')">✨ See My Results →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE: BUDGET ═══════════ -->
+<div class="page" id="page-budget">
+  <div class="form-page">
+    <div class="page-header">
+      <h1>💰 Budget Insights</h1>
+      <p>Smart spending for a satisfied stomach.</p>
+    </div>
+
+    <div class="budget-trio">
+      <div class="budget-box" style="background:linear-gradient(135deg,#FFF8F0,#FDEEE0);">
+        <div class="budget-box-icon">💼</div>
+        <div class="budget-box-label">Your Budget</div>
+        <div class="budget-box-val" style="color:var(--orange)">₹<span id="budgetDisplay">150</span></div>
+      </div>
+      <div class="budget-box" style="background:linear-gradient(135deg,#F0FAF5,#D4F5E9);">
+        <div class="budget-box-icon">🍽️</div>
+        <div class="budget-box-label">Best Match</div>
+        <div class="budget-box-val" style="color:var(--green)">₹<span id="bestPriceDisplay">40</span></div>
+      </div>
+      <div class="budget-box" style="background:linear-gradient(135deg,#F0F4FF,#E8EAFF);">
+        <div class="budget-box-icon">🎉</div>
+        <div class="budget-box-label">You Save</div>
+        <div class="budget-box-val" style="color:var(--lavender)">₹<span id="savingsDisplay">110</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">📊 Price comparison — your top matches</div>
+      <div class="comparison-list" id="comparisonList"></div>
+    </div>
+
+    <div class="panel" style="background:linear-gradient(135deg,#FFF8F0,#FDEEE0);border-left:5px solid var(--orange);">
+      <div class="panel-title">💡 Smart spending tips</div>
+      <ul style="padding-left:20px;color:var(--brown);line-height:2.1;font-size:0.9rem;">
+        <li>On-campus cafés (Desi Urban Café, Wok N Roll, Nescafe) are always the cheapest.</li>
+        <li>Thali meals offer the best value — multiple items, one price.</li>
+        <li>Maggi + chai combo from any café is under ₹70 — ultimate budget meal.</li>
+        <li>Laziz Pizza has unlimited Friday buffet for ₹190 — best deal of the week!</li>
+      </ul>
+    </div>
+
+    <div class="action-row">
+      <button class="btn-sm btn-sm-primary" onclick="showPage('results')">✨ See My Results →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE: FOOD DETAILS ═══════════ -->
+<div class="page" id="page-food">
+  <div class="form-page">
+    <div class="page-header">
+      <h1>🍽️ Food Details</h1>
+      <p>Everything you need to know about your recommended meals.</p>
+    </div>
+    <div id="foodDetailsList"></div>
+    <div class="food-science" id="foodScienceBox">
+      <h4>🧪 The Food Science</h4>
+      <p id="foodScienceText">Your positive state boosts taste perception — bold, exciting flavours enhance and extend positive emotions.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE: PROFILE ═══════════ -->
+<div class="page" id="page-profile">
+  <div class="form-page">
+    <div class="page-header">
+      <h1>👤 Your Profile</h1>
+      <p>Store your preferences for a more personalised experience.</p>
+    </div>
+
+    <div class="profile-layout">
+      <div>
+        <div class="profile-avatar-card">
+          <div class="avatar-circle" id="avatarCircle">?</div>
+          <div class="avatar-name" id="avatarName">Friend</div>
+          <div class="avatar-uni">Shoolini University</div>
+          <div class="mood-snapshot" id="moodSnapshotCard" style="display:none">
+            <div class="mood-snapshot-label">Last mood check</div>
+            <div class="mood-snapshot-emoji" id="snapEmoji">😊</div>
+            <div class="mood-snapshot-val" id="snapMood">Happy</div>
+            <div style="font-size:0.78rem;color:var(--warm-gray);margin-top:4px;" id="snapEnergy">Energy: 50/100</div>
+          </div>
+        </div>
+
+        <div class="badges-row" style="grid-template-columns:1fr 1fr;margin-top:16px;">
+          <div class="badge-card" style="background:#FFF3C4;"><div class="badge-icon">🌟</div><div class="badge-label">Early Adopter</div></div>
+          <div class="badge-card" style="background:#E8EAFF;"><div class="badge-icon">🧠</div><div class="badge-label">Mood Master</div></div>
+          <div class="badge-card" style="background:#D4F5E9;"><div class="badge-icon">📍</div><div class="badge-label">Campus Explorer</div></div>
+          <div class="badge-card" style="background:#D4FFE8;"><div class="badge-icon">💚</div><div class="badge-label">Mindful Eater</div></div>
+        </div>
+      </div>
+
+      <div class="profile-form-card">
+        <h3>✏️ Your Preferences</h3>
+        <div class="form-group" style="margin-bottom:20px;">
+          <label class="form-label">Your name (optional)</label>
+          <input type="text" class="form-input" id="nameInput" placeholder="e.g. Divya">
+        </div>
+        <div class="form-row" style="margin-bottom:20px;">
+          <div class="form-group">
+            <label class="form-label">Dietary type</label>
+            <select class="form-select" id="dietarySelect">
+              <option>Vegetarian</option><option>Vegan</option>
+              <option>Non-Vegetarian</option><option>Eggetarian</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Favourite cuisine</label>
+            <select class="form-select" id="prefCuisine">
+              <option>Any</option><option>Indian</option><option>Chinese</option>
+              <option>Italian</option><option>South Indian</option>
+              <option>Fast Food</option><option>Healthy</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:28px;">
+          <label class="form-label">Typical budget (₹)</label>
+          <input type="number" class="form-input" id="budgetProfile" value="150" min="50" max="500" step="10">
+        </div>
+        <button class="btn-submit" onclick="saveProfile()">💾 Save Profile</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE: RESULTS ═══════════ -->
+<div class="page" id="page-results">
+  <div class="form-page">
+    <div class="results-hero">
+      <div style="font-size:3.5rem;margin-bottom:14px;" id="resultsHeroEmoji">😊</div>
+      <h1 id="resultsHeroTitle">Here's what we found for you!</h1>
+      <p id="resultsHeroSub">Your mood-matched meal recommendations are ready.</p>
+    </div>
+
+    <h2 style="font-family:'Cormorant Garamond',serif;font-size:1.7rem;color:var(--charcoal);text-align:center;margin-bottom:24px;">🍽️ Your top picks</h2>
+
+    <div class="result-cards" id="resultCardsGrid"></div>
+
+    <div class="summary-bar" id="summaryBar"></div>
+
+    <div class="action-row" style="justify-content:center;">
+      <button class="btn-sm btn-sm-ghost" onclick="showPage('food')">🔍 Food Details</button>
+      <button class="btn-sm btn-sm-ghost" onclick="showPage('budget')">💰 Budget Breakdown</button>
+      <button class="btn-sm btn-sm-primary" onclick="showPage('mood')">🔄 Check Mood Again</button>
+    </div>
+
+    <div class="wellness-tip" style="margin-top:28px;" id="encouragementBox">
+      <div class="tip-icon">🌟</div>
+      <p id="encouragementText">Enjoy your meal!</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PAGE: ABOUT ═══════════ -->
+<div class="page" id="page-about">
+  <div class="form-page">
+    <div class="about-hero">
+      <h2>What is MoodBite? 🍜</h2>
+      <p>MoodBite is a <strong>smart, emotion-aware food recommender</strong> built specifically for students at Shoolini University, Solan. It combines <strong>affective computing</strong>, <strong>vector semantic search</strong>, and <strong>real local menu data</strong> to recommend food that actually matches how you feel — not just what's popular.</p>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-card">
+        <h3>🧠 Why This Matters</h3>
+        <ul>
+          <li>People feel confused about what to eat</li>
+          <li>Mood directly affects food preferences</li>
+          <li>Decision fatigue is real and exhausting</li>
+          <li>This app makes the decision for you</li>
+          <li>Familiar comfort food helps with anxiety</li>
+        </ul>
+      </div>
+      <div class="about-card">
+        <h3>🔬 The Technology</h3>
+        <ul>
+          <li>ChromaDB vector database</li>
+          <li>Sentence-transformers embeddings</li>
+          <li>Google Gemini API for natural language</li>
+          <li>RAG (Retrieval-Augmented Generation)</li>
+          <li>LangChain orchestration framework</li>
+          <li>Streamlit frontend</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="text-align:left;margin-bottom:20px;">🌿 Wellness Tips</h2>
+    <div class="wellness-grid">
+      <div class="wellness-card" style="background:#FFE4CC;border-left:4px solid var(--orange);">
+        <h4>😰 If stressed</h4>
+        <ul><li>Drink warm tea or soup</li><li>Eat light comfort food</li><li>Avoid skipping meals</li></ul>
+      </div>
+      <div class="wellness-card" style="background:#E8EAFF;border-left:4px solid var(--lavender);">
+        <h4>😴 If tired</h4>
+        <ul><li>Choose easy-to-digest meals</li><li>Avoid heavy fried food</li><li>Stay hydrated</li></ul>
+      </div>
+      <div class="wellness-card" style="background:#D4F5E9;border-left:4px solid var(--green);">
+        <h4>😊 If happy</h4>
+        <ul><li>Try new cuisines</li><li>Eat balanced meals</li><li>Share food with friends</li></ul>
+      </div>
+      <div class="wellness-card" style="background:#FFF0E0;border-left:4px solid var(--amber);">
+        <h4>😟 If anxious</h4>
+        <ul><li>Stick to familiar food</li><li>Avoid too much caffeine</li><li>Warm food calms the nerves</li></ul>
+      </div>
+    </div>
+
+    <div class="team-section">
+      <h3>👥 Built by</h3>
+      <div class="team-grid">
+        <div class="team-card" style="background:#FFE4CC;">
+          <div class="team-initial">D</div>
+          <div class="team-name">Divya Ohri</div>
+          <div class="team-reg">GF202453419</div>
+          <div class="team-role">🔧 Backend & GenAI</div>
+        </div>
+        <div class="team-card" style="background:#D4F5E9;">
+          <div class="team-initial">A</div>
+          <div class="team-name">Aishwarya Rana</div>
+          <div class="team-reg">GF202453090</div>
+          <div class="team-role">🗄️ RAG & Vector DB</div>
+        </div>
+        <div class="team-card" style="background:#E8EAFF;">
+          <div class="team-initial">D</div>
+          <div class="team-name">Diya</div>
+          <div class="team-reg">GF202460495</div>
+          <div class="team-role">🎨 Frontend & UI</div>
+        </div>
+        <div class="team-card" style="background:#FFF3C4;">
+          <div class="team-initial">K</div>
+          <div class="team-name">Kashish</div>
+          <div class="team-reg">GF202462554</div>
+          <div class="team-role">📋 Testing & Docs</div>
+        </div>
+      </div>
+    </div>
+
+    <footer style="margin-top:40px;">Made with ❤️ at Yogananda School of AI, Shoolini University · CSU2217</footer>
+  </div>
+</div>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+// ── STATE ──
+const state = {
+  mood: 'happy', stress: 5, energy: 50, budget: 150,
+  cuisine: 'Any', name: '', dietary: 'Vegetarian',
+  results: [], moodLabel: '', moodTags: [], aiExplanation: ''
+};
+
+// ── DATA ──
+const MOOD_DATA = {
+  happy: {
+    icon:'😊', label:'Happy & Energetic', bg:'#D4F5E9', accent:'#2ECC71',
+    tagline:"You're radiating good vibes today!",
+    tags:['fun','fresh','indulgent','energy'],
+    explain: e => `You're in great spirits! 🌟 Your energy is at ${e}/100 — let's match that with something exciting and delicious.`,
+    tip:'🌱 Your positive state boosts taste perception — try something new today!',
+    science:'🧪 When happy, your palate is more adventurous. Bold, exciting flavours enhance and extend positive emotions.',
+    encourage:'🌟 Keep that energy going — you deserve the best today!'
+  },
+  stressed: {
+    icon:'😰', label:'Stressed', bg:'#FFE4CC', accent:'#FF8C42',
+    tagline:'Take a breath — food can help.',
+    tags:['comfort','warm','soothing','light'],
+    explain: e => `We can see you're carrying some weight right now 💙. Warm, comforting food has been shown to reduce cortisol levels.`,
+    tip:'🍵 Warm foods trigger serotonin release. Avoid caffeine on an empty stomach.',
+    science:'🧪 Warm carbohydrate-rich foods stimulate serotonin production, reducing cortisol — the stress hormone.',
+    encourage:'💙 Remember: nourishing yourself is an act of self-care. You\'ve got this.'
+  },
+  tired: {
+    icon:'😴', label:'Low Energy', bg:'#E8EAFF', accent:'#7C5CFC',
+    tagline:"Your body's asking for rest and nourishment.",
+    tags:['light','warm','easy','comfort'],
+    explain: e => `Your energy is at ${e}/100 — your body needs gentle, easily digestible food that won't tax your system further.`,
+    tip:'💧 Stay hydrated. Light, easily digestible meals prevent energy crashes.',
+    science:'🧪 Light, easily digestible foods prevent your body from using extra energy on digestion, restoring you faster.',
+    encourage:'🌸 Rest, eat well, and be kind to yourself. Tomorrow is a new day.'
+  },
+  anxious: {
+    icon:'😟', label:'Anxious', bg:'#FFF0E0', accent:'#FF8C42',
+    tagline:'Familiar comfort is what you need.',
+    tags:['comfort','soothing','warm','simple'],
+    explain: e => `Feeling uneasy is tough 🌸. Familiar, warm foods trigger serotonin and help calm the nervous system.`,
+    tip:'🌸 Familiar foods reduce cortisol. Avoid excessive spice when anxious.',
+    science:'🧪 Familiar comfort foods activate the brain\'s reward system, providing psychological safety and stability.',
+    encourage:'🌿 One meal at a time. You\'re doing great just by taking care of yourself.'
+  },
+  neutral: {
+    icon:'😐', label:'Neutral', bg:'#F0F0F0', accent:'#888888',
+    tagline:"Just hungry? That's perfectly fine!",
+    tags:['filling','comfort','quick'],
+    explain: e => `Good old hunger — the most honest feeling of all 😄. Let's find you something solid and satisfying.`,
+    tip:'⚖️ A balanced meal keeps your mood stable throughout the day.',
+    science:'🧪 A balanced meal stabilises blood sugar, keeping your mood even and your focus sharp.',
+    encourage:'⭐ Eating well is always a good decision. Enjoy!'
+  },
+  frustrated: {
+    icon:'😤', label:'Frustrated', bg:'#FFE8E8', accent:'#FF4757',
+    tagline:'Bold food for a bold mood.',
+    tags:['spicy','fun','indulgent','heavy'],
+    explain: e => `That frustration is valid! 🔥 Sometimes bold, flavourful food is exactly the outlet you need.`,
+    tip:'🌶️ Spicy food releases endorphins — nature\'s mood elevator!',
+    science:'🧪 Spicy food triggers endorphin release — the same feel-good chemicals released during exercise.',
+    encourage:'🔥 Channel it into something delicious. You\'ve earned a treat.'
+  },
+  cozy: {
+    icon:'🥰', label:'Cozy & Relaxed', bg:'#FFF0F8', accent:'#FF6B8A',
+    tagline:'Perfect time for warm comfort food.',
+    tags:['comfort','warm','creamy','soothing'],
+    explain: e => `You're in full cozy mode ☁️ — and we love it. Creamy, warm, comforting food is exactly what this vibe calls for.`,
+    tip:'☁️ Comforting food and rest are a powerful healing combination.',
+    science:'🧪 Warm, creamy foods stimulate the vagus nerve, triggering the parasympathetic \'rest and digest\' response.',
+    encourage:'☁️ Enjoy every bite. This is your moment of peace.'
+  }
+};
+
+const MOOD_RESULTS = {
+  happy: [
+    {name:'Farm Fresh Pizza',place:'Desi Urban Cafe',price:190,tags:['fun','fresh','cheesy'],category:'Pizza',dist:0,desc:'Loaded with garden-fresh veggies and gooey cheese. A celebration in every bite!'},
+    {name:'Honey Chilli Momos',place:'Wonder Hills Cafe',price:120,tags:['spicy','fun','warm'],category:'Momos',dist:0.9,desc:'Crispy momos tossed in a fiery honey-chilli glaze — absolutely addictive.'},
+    {name:'Cold Coffee',place:'Desi Urban Cafe',price:90,tags:['energy','refreshing','fun'],category:'Cold Coffee',dist:0,desc:'Chilled, creamy and energising. Perfect with a big smile.'},
+  ],
+  stressed: [
+    {name:'Masala Chai',place:'Cheers to Chai',price:30,tags:['comfort','warm','soothing'],category:'Chai',dist:0.7,desc:'A warm hug in a cup. Let the spices ease your mind.'},
+    {name:'Tomato Comfort Soup',place:'Wonder Hills Cafe',price:70,tags:['warm','soothing','light'],category:'Soup',dist:0.9,desc:'Smooth, tangy, and deeply comforting. Just what stress ordered.'},
+    {name:'Plain Maggi',place:'Wok N Roll Cafe',price:40,tags:['comfort','quick','easy'],category:'Maggi',dist:0,desc:'The original comfort food. Simple, warm, and always there for you.'},
+  ],
+  tired: [
+    {name:'Veg Soup',place:'Wok N Roll Cafe',price:50,tags:['light','warm','soothing'],category:'Soup',dist:0,desc:'Light and restorative. Exactly what a tired body needs.'},
+    {name:'Idli Sambar',place:"Aru's Cafe",price:70,tags:['light','healthy','warm'],category:'South Indian',dist:0.7,desc:'Easy to digest, gentle on the stomach. Pure nourishment.'},
+    {name:'Plain Maggi',place:'Wok N Roll Cafe',price:40,tags:['comfort','quick','light'],category:'Maggi',dist:0,desc:'Warm noodles for a weary soul — ready in minutes.'},
+  ],
+  anxious: [
+    {name:'Kesar Chai',place:'Cheers to Chai',price:30,tags:['comfort','warm','soothing'],category:'Chai',dist:0.7,desc:'Saffron-infused warmth — calming and grounding.'},
+    {name:'Aloo Paratha',place:'Desi Urban Cafe',price:40,tags:['comfort','warm','familiar'],category:'Paratha',dist:0,desc:'Familiar and wholesome. Sometimes the classics are best.'},
+    {name:'Veg Thali',place:'Yellow Chilly',price:100,tags:['filling','comfort','complete'],category:'Thali',dist:0.6,desc:'A complete, balanced meal to ground you when you feel scattered.'},
+  ],
+  frustrated: [
+    {name:'Chilli Paneer',place:'Desi Urban Cafe',price:170,tags:['spicy','fun','heavy'],category:'Chinese',dist:0,desc:'Bold spices and bold flavours. Channel that energy into something delicious.'},
+    {name:'Honey Chilli Potato',place:'Cheers to Chai',price:120,tags:['spicy','fun','snack'],category:'Snacks',dist:0.7,desc:'Fiery and satisfying. Let it all out, one bite at a time.'},
+    {name:'Peri Peri Momos',place:'Friends Corner',price:100,tags:['spicy','fun','comfort'],category:'Momos',dist:0.4,desc:'Steaming hot momos with a spicy kick that hits just right.'},
+  ],
+  cozy: [
+    {name:'White Sauce Pasta',place:'Desi Urban Cafe',price:110,tags:['comfort','creamy','warm'],category:'Pasta',dist:0,desc:'Creamy, rich, and utterly cozy. Like a warm blanket for your stomach.'},
+    {name:'Hot Chocolate',place:'Nescafe',price:25,tags:['comfort','sweet','warm'],category:'Hot Coffee',dist:0.1,desc:'Velvety chocolate warmth — the ultimate cozy companion.'},
+    {name:'Rajma Chawal',place:'Yellow Chilly',price:50,tags:['comfort','filling','warm'],category:'Meal Deal',dist:0.6,desc:'The ultimate desi comfort meal. Home in a bowl.'},
+  ],
+  neutral: [
+    {name:'Veg Thali',place:'Zaika Restaurant',price:120,tags:['filling','complete','value'],category:'Indian',dist:0.3,desc:'A wholesome, balanced spread that hits every note.'},
+    {name:'Hakka Noodles',place:'Kiyansh Cafe',price:50,tags:['quick','light','fun'],category:'Noodles',dist:0.8,desc:'Classic, satisfying, and always a crowd-pleaser.'},
+    {name:'Cheese Burger',place:'Nescafe',price:60,tags:['quick','filling','fun'],category:'Bakery',dist:0.1,desc:'A quick, cheesy fix when you just want something solid.'},
+  ]
+};
+
+const FOOD_ICONS = {
+  Pizza:'🍕', Momos:'🥟', Chai:'☕', 'Cold Coffee':'🧋', Soup:'🍲',
+  Maggi:'🍜', Pasta:'🍝', 'South Indian':'🫓', Paratha:'🫓', Burger:'🍔',
+  Thali:'🍱', Shake:'🥤', Noodles:'🍜', Juice:'🥤', Chinese:'🥡',
+  Indian:'🍛', Snacks:'🍟', 'Hot Coffee':'☕', 'Meal Deal':'🍱', Bakery:'🥐'
+};
+
+const TAG_COLORS = {
+  comfort:'#FFE4CC', warm:'#FFD4B8', light:'#D4F5E9', soothing:'#E8EAFF',
+  energy:'#FFF3C4', fun:'#FFE8F0', spicy:'#FFD4D4', filling:'#E0F4FF',
+  fresh:'#D4F5D4', indulgent:'#F5D4FF', quick:'#D4F0FF', easy:'#D4FFE8',
+  creamy:'#FFF0D4', heavy:'#F0E8FF', simple:'#E8F0E0', familiar:'#FFF8E0',
+  complete:'#E0F8FF', value:'#E8FFE8', healthy:'#D4FFD4'
+};
+
+// ── NAVIGATION ──
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  const navEl = document.getElementById('nav-' + id);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ── SLIDERS ──
+function updateSlider(sliderId, valId) {
+  const s = document.getElementById(sliderId);
+  const max = s.max;
+  document.getElementById(valId).textContent = s.value + ' / ' + max;
+}
+
+// ── MOOD SELECT ──
+function selectMood(el) {
+  document.querySelectorAll('.mood-option').forEach(m => m.classList.remove('selected'));
+  el.classList.add('selected');
+  state.mood = el.dataset.mood;
+}
+
+// ── SUBMIT ──
+function submitMoodForm() {
+  state.stress = parseInt(document.getElementById('stressSlider').value);
+  state.energy = parseInt(document.getElementById('energySlider').value);
+  state.budget = parseInt(document.getElementById('budgetInput').value) || 150;
+  state.cuisine = document.getElementById('cuisineSelect').value;
+  state.mood = document.querySelector('.mood-option.selected')?.dataset.mood || 'happy';
+
+  // Get tags
+  const md = MOOD_DATA[state.mood];
+  let tags = [...md.tags];
+  if (state.energy < 30) tags = ['light','easy','quick',...tags];
+  else if (state.energy > 70) tags = ['energy','filling',...tags];
+  if (state.stress > 7) tags = ['comfort','soothing',...tags];
+  state.moodTags = [...new Set(tags)].slice(0, 4);
+  state.aiExplanation = md.explain(state.energy);
+
+  // Filter results
+  let raw = MOOD_RESULTS[state.mood] || MOOD_RESULTS.neutral;
+  let filtered = raw.filter(r => r.price <= state.budget);
+  if (!filtered.length) filtered = raw.slice(0, 2);
+  state.results = filtered;
+
+  // Show loading
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.classList.add('active');
+  setTimeout(() => {
+    overlay.classList.remove('active');
+    updateInsightsPage();
+    updateResultsPage();
+    updateBudgetPage();
+    updateFoodPage();
+    showToast('✅ Mood analysed! See your results.');
+    showPage('insights');
+  }, 1600);
+}
+
+// ── UPDATE INSIGHTS ──
+function updateInsightsPage() {
+  const md = MOOD_DATA[state.mood];
+  document.getElementById('insightEmoji').textContent = md.icon;
+  document.getElementById('insightMoodLabel').textContent = md.label;
+  document.getElementById('insightMoodLabel').style.color = md.accent;
+  document.getElementById('insightTagline').textContent = md.tagline;
+
+  const card = document.getElementById('moodHeroCard');
+  card.style.background = md.bg;
+
+  document.getElementById('insightEnergyNum').innerHTML = `${state.energy}<span>/100</span>`;
+  document.getElementById('insightEnergyBar').style.width = state.energy + '%';
+  document.getElementById('insightStressNum').innerHTML = `${state.stress}<span>/10</span>`;
+  document.getElementById('insightStressBar').style.width = (state.stress * 10) + '%';
+
+  document.getElementById('insightExplain').textContent = state.aiExplanation;
+
+  const tagsEl = document.getElementById('insightTags');
+  tagsEl.innerHTML = state.moodTags.map(t =>
+    `<span class="tag-big" style="background:${TAG_COLORS[t]||'#F0F0F0'}">${t.charAt(0).toUpperCase()+t.slice(1)}</span>`
+  ).join('');
+
+  document.getElementById('insightWellnessTip').innerHTML = `<strong>Wellness Tip:</strong> ${md.tip}`;
+}
+
+// ── UPDATE RESULTS ──
+function updateResultsPage() {
+  const md = MOOD_DATA[state.mood];
+  const name = state.name || 'friend';
+  document.getElementById('resultsHeroEmoji').textContent = md.icon;
+  document.getElementById('resultsHeroTitle').textContent = `Here's what we found for you${name !== 'friend' ? ', ' + name : ''}!`;
+  document.getElementById('resultsHeroSub').textContent = state.aiExplanation;
+
+  const ranks = ['🥇 Best Pick','🥈 Great Option','🥉 Also Perfect'];
+  const grid = document.getElementById('resultCardsGrid');
+  grid.innerHTML = state.results.map((r, i) => {
+    const icon = FOOD_ICONS[r.category] || '🍽️';
+    const dist = r.dist === 0 ? 'On Campus 🎓' : `${r.dist}km away 📍`;
+    const savings = state.budget - r.price;
+    const tagHtml = r.tags.slice(0,3).map(t=>`<span class="tag">${t}</span>`).join('');
+    return `
+    <div class="result-card">
+      <div class="result-rank">${ranks[i]||'🍽️ Great Pick'}</div>
+      <div class="result-food-emoji">${icon}</div>
+      <div class="result-name">${r.name}</div>
+      <div class="result-place">🏪 ${r.place} · ${dist}</div>
+      <div class="result-desc">${r.desc}</div>
+      <div class="result-tags">${tagHtml}</div>
+      <div class="result-price-box">
+        <div class="result-price">₹${r.price}</div>
+        <div class="result-save">You save ₹${savings} 💚</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const best = state.results.reduce((a,b)=>a.price<b.price?a:b);
+  document.getElementById('summaryBar').innerHTML = `
+    <div class="summary-bar-info">
+      <h4>🎯 Our Top Recommendation</h4>
+      <p><b>${best.name}</b> at <b>${best.place}</b> fits your mood and saves you <b style="color:var(--green-light)">₹${state.budget-best.price}</b>.</p>
+    </div>
+    <div class="summary-price">
+      <div class="summary-price-num">₹${best.price}</div>
+      <div class="summary-price-label">best price</div>
+    </div>`;
+
+  document.getElementById('encouragementText').innerHTML = MOOD_DATA[state.mood].encourage;
+}
+
+// ── UPDATE BUDGET ──
+function updateBudgetPage() {
+  if (!state.results.length) return;
+  const best = state.results.reduce((a,b)=>a.price<b.price?a:b);
+  document.getElementById('budgetDisplay').textContent = state.budget;
+  document.getElementById('bestPriceDisplay').textContent = best.price;
+  document.getElementById('savingsDisplay').textContent = state.budget - best.price;
+
+  const list = document.getElementById('comparisonList');
+  list.innerHTML = state.results.map(r => {
+    const pct = Math.min(Math.round((r.price/state.budget)*100), 100);
+    const color = pct < 60 ? '#5BAF6E' : pct < 85 ? '#E8732A' : '#E8556A';
+    return `
+    <div class="comp-row">
+      <div class="comp-info">
+        <div class="comp-name">${r.name}</div>
+        <div class="comp-place">📍 ${r.place}</div>
+      </div>
+      <div class="comp-bar-wrap">
+        <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+      </div>
+      <div class="comp-price" style="color:${color}">₹${r.price}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── UPDATE FOOD ──
+function updateFoodPage() {
+  const list = document.getElementById('foodDetailsList');
+  list.innerHTML = state.results.map(r => {
+    const icon = FOOD_ICONS[r.category] || '🍽️';
+    const dist = r.dist === 0 ? 'On Campus 🎓' : `${r.dist}km away 📍`;
+    const tagHtml = r.tags.map(t=>`<span class="tag" style="background:${TAG_COLORS[t]||'#F0F0F0'}">${t}</span>`).join('');
+    return `
+    <div class="food-detail-card">
+      <div class="food-detail-emoji">${icon}</div>
+      <div class="food-detail-content">
+        <div class="food-detail-name">${r.name}</div>
+        <div class="food-detail-meta">🏪 ${r.place} &nbsp;·&nbsp; ${dist}</div>
+        <div class="food-detail-desc">${r.desc}</div>
+        <div class="food-detail-bottom">
+          <div class="food-price-big">₹${r.price}</div>
+          ${tagHtml}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('foodScienceText').textContent = MOOD_DATA[state.mood]?.science || '';
+}
+
+// ── SAVE PROFILE ──
+function saveProfile() {
+  state.name = document.getElementById('nameInput').value;
+  state.dietary = document.getElementById('dietarySelect').value;
+  state.cuisine = document.getElementById('prefCuisine').value;
+  state.budget = parseInt(document.getElementById('budgetProfile').value) || 150;
+
+  const n = state.name || 'Friend';
+  document.getElementById('avatarCircle').textContent = n[0].toUpperCase();
+  document.getElementById('avatarName').textContent = n;
+
+  if (state.mood) {
+    const md = MOOD_DATA[state.mood];
+    const snap = document.getElementById('moodSnapshotCard');
+    snap.style.display = 'block';
+    document.getElementById('snapEmoji').textContent = md.icon;
+    document.getElementById('snapMood').textContent = md.label;
+    document.getElementById('snapEnergy').textContent = `Energy: ${state.energy}/100`;
+  }
+
+  showToast(`✅ Profile saved! Welcome, ${state.name || 'friend'}! 🌟`);
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  updateSlider('stressSlider','stressVal');
+  updateSlider('energySlider','energyVal');
+});
+</script>
+</body>
+</html>
